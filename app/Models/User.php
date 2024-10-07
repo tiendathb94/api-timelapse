@@ -8,6 +8,8 @@ use App\Trait\HasStorableApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use SebastianBergmann\CodeCoverage\Report\Xml\Project;
+
 class User extends Authenticatable
 {
     use HasStorableApiTokens, HasFactory, Notifiable;
@@ -44,5 +46,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id');
     }
 }
