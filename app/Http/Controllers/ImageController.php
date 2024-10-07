@@ -22,7 +22,7 @@ class ImageController extends Controller
 
         try {
             $client = new S3Client([
-                'region'  => config('filesystems.disks.s3.region'),
+                'region'  => "us-west-1",
                 'version' => 'latest',
                 'credentials' => [
                     'key'    => config('filesystems.disks.s3.key'),
@@ -31,10 +31,9 @@ class ImageController extends Controller
                 'endpoint' => config('filesystems.disks.s3.endpoint'),
                 'use_path_style_endpoint' => true,
             ]);
-
             $result = $client->listObjectsV2([
                 'Bucket' => config('filesystems.disks.s3.bucket'),
-                'Prefix' => 'user0000015/project0001/camera0001/photos/2024/10/05',
+                'Prefix' => 'user0000015/project0001/camera0001/photos/2024/10/07',
             ]);
 
             $data = array_map(function ($item) {
