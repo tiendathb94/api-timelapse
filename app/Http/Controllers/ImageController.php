@@ -18,7 +18,7 @@ class ImageController extends Controller
 
         $cameraId = $request->camera_id;
 
-        $camera = Camera::query()->findOrFail($cameraId);
+        $camera = Camera::query()->where('active', 1)->findOrFail($cameraId);
 
         $project = $camera->project;
 

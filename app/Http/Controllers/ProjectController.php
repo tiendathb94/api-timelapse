@@ -11,7 +11,10 @@ class ProjectController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $projects = Project::query()->where('group_id', $user->group_id)->get();
+        $projects = Project::query()->where([
+            'group_id' => $user->group_id,
+            'active' => 1
+        ])->get();
         return response()->json(['data' => $projects]);
     }
 }
