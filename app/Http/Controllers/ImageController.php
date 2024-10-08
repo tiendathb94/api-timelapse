@@ -30,7 +30,7 @@ class ImageController extends Controller
         // dd($prefix);
         try {
             $client = new S3Client([
-                'region'  => config('filesystems.disks.s3.region'),
+                'region'  => "us-west-1",
                 'version' => 'latest',
                 'credentials' => [
                     'key'    => config('filesystems.disks.s3.key'),
@@ -39,7 +39,6 @@ class ImageController extends Controller
                 'endpoint' => config('filesystems.disks.s3.endpoint'),
                 'use_path_style_endpoint' => true,
             ]);
-
             $result = $client->listObjectsV2([
                 'Bucket' => config('filesystems.disks.s3.bucket'),
                 'Prefix' => $prefix,
