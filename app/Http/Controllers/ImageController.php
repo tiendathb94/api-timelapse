@@ -52,7 +52,7 @@ class ImageController extends Controller
             $data = [];
             Log::debug($th->getMessage());
         }
-        array_multisort(array_column($data, 'LastModified'), SORT_DESC, $data);
+        // array_multisort(array_column($data, 'LastModified'), SORT_DESC, $data);
 
         return response()->json(['data' => $data]);
     }
