@@ -11,6 +11,8 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('change-password', [AuthController::class, 'changePassword'])->name('change-password');
+
     Route::get('user', [AuthController::class, 'getUser']);
     Route::get('get-image', [ImageController::class, 'getImage']);
 

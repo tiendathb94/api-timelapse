@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Request;
 
 class AuthController extends Controller
 {
@@ -50,5 +51,17 @@ class AuthController extends Controller
     public function getUser()
     {
         return response()->json(['data' => Auth::user()]);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $password = $request->get('password');
+
+        $user = User::query()->find(Auth::id());
+
+        $user->password = Hash::make($password);
+        $user->save();
+
+        return response()->json(['message' => 'Đổi mật khẩu thành công']);
     }
 }
