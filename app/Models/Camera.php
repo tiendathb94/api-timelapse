@@ -16,4 +16,9 @@ class Camera extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
 }

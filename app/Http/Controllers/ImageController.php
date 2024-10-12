@@ -46,13 +46,19 @@ class ImageController extends Controller
 
             $data = array_map(function ($item) {
                 $item['Url'] = sprintf("%s/%s/%s", config('filesystems.disks.s3.endpoint'), config('filesystems.disks.s3.bucket'), $item['Key']);
+                $split = explode('/', $item['Key']);
+                $fileName = $split[count($split) - 1];
+
+                $dateString = substr($fileName, 0, 15);
+                $item['DateTime'] = Carbon::createFromFormat('Ymd-His', $dateString)->format('Y-m-d H:i:s');
+                
                 return $item;
             }, data_get($result, 'Contents', []));
         } catch (\Throwable $th) {
             $data = [];
             Log::debug($th->getMessage());
         }
-        // array_multisort(array_column($data, 'LastModified'), SORT_DESC, $data);
+        array_multisort(array_column($data, 'DateTime'), SORT_ASC, $data);
 
         return response()->json(['data' => $data]);
     }
