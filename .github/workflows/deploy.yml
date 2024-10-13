@@ -1,0 +1,13 @@
+name: Build BE
+run-name: Build BE
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: self-hosted
+    steps:
+      - name: build
+        run: |
+          cd /var/www/dev/api-timelapse &&
+          git fetch &&
+          git pull origin dev &&
+          php artisan optimize

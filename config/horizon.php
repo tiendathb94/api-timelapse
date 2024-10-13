@@ -182,7 +182,7 @@ return [
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => ['generate-video-timelapse', 'generate-video-timelapse'],
+            'queue' => ['download-image-s3', 'generate-video-timelapse'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 2,
