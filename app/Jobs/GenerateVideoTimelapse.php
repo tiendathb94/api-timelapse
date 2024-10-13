@@ -39,5 +39,7 @@ class GenerateVideoTimelapse implements ShouldQueue
         Log::info('---------------------------');
 
         exec($ffmpeg_cmd);
+
+        // put s3 and send mail
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Trait;
 
+use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\NewAccessToken;
 
@@ -17,6 +18,7 @@ trait HasStorableApiTokens
             'token'      => hash('sha256', $plainTextToken),
             'kept_token' => $store ? $plainTextToken : null,
             'abilities'  => $abilities,
+            'expires_at' => Carbon::now()->addMinutes(config('sanctum.expiration'))
         ]);
 
         return new NewAccessToken($token, $plainTextToken);

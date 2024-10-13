@@ -34,7 +34,6 @@ class DownloadImageFromS3 implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info($this->path);
         $fileContent = file_get_contents($this->link);
 
         $image = ImageManager::imagick()->read($fileContent);

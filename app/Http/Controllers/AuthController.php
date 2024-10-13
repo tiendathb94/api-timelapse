@@ -26,10 +26,10 @@ class AuthController extends Controller
         if (!Hash::check($request->get('password'), $user->password)) {
             return response()->json(['message' => 'Thông tin tài khoản không chính xác'], 400);
         }
+        
+        if (count($user->tokens) > 3) $user->tokens->first()->delete();
 
-        $user->tokens()->delete();
-
-        $access_token = $user->createToken($user->id)->plainTextToken;
+        $access_token = $user->createToken($user->name)->plainTextToken;
 
         $minutes = config('sanctum.expiration');
 
