@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\RequestVideoTimelapse;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -40,6 +41,8 @@ class GenerateVideoTimelapse implements ShouldQueue
 
         exec($ffmpeg_cmd);
 
+        RequestVideoTimelapse::query()->where('code', $this->path)->update(['is_handled' => 1]);
+        
         // put s3 and send mail
     }
 }
