@@ -100,10 +100,10 @@ class TimelapseController extends Controller
 
         $saved = 0;
 
-        // foreach ($newData as $value) {
-        //     $saved++;
-        //     DownloadImageFromS3::dispatch($value['Url'], $request_video_timelapse->code, '/seq-' . sprintf('%08d', $saved) . '.jpg', count($newData))->onQueue('download-image-s3');
-        // }
+        foreach ($newData as $value) {
+            $saved++;
+            DownloadImageFromS3::dispatch($value['Url'], $request_video_timelapse->code, '/seq-' . sprintf('%08d', $saved) . '.jpg', count($newData))->onQueue('download-image-s3');
+        }
 
         return response()->json(['message' => 'Request Success. Please waiting...']);
     }
