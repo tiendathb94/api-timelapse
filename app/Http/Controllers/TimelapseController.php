@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\Auth;
 
 class TimelapseController extends Controller
 {
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+
+        $videos = RequestVideoTimelapse::where('user_id', $user->id)->with('camera')->orderBy('created_at', 'DESC')->get();
+
+        return response()->json(['data' => $videos]);
+    }
+
     public function createTimelapse(Request $request)
     {
         $user = Auth::user();
@@ -28,7 +37,7 @@ class TimelapseController extends Controller
 
         $maxId = RequestVideoTimelapse::query()->max('id');
         $code = RequestVideoTimelapse::createVideoCode($maxId + 1);
-        
+
         $request_video_timelapse = RequestVideoTimelapse::query()
             ->create([
                 'user_id' => Auth::id(),
@@ -36,6 +45,7 @@ class TimelapseController extends Controller
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'is_handled' => 0,
+                'camera_id' => $cameraId,
                 'code' => $code
             ]);
 
@@ -43,7 +53,7 @@ class TimelapseController extends Controller
         $period = CarbonPeriod::create($start_date, $end_date);
 
         $newData = [];
-        
+
         foreach ($period as $date) {
 
             $year = $date->format('Y');
@@ -84,15 +94,17 @@ class TimelapseController extends Controller
             $data = array_filter($data, function ($value) {
                 return preg_match('/\.(jpg|jpeg|png)$/i', $value['FileName']);
             });
-            
+
             $newData = array_merge($newData, $data);
         }
 
         $saved = 0;
 
-        foreach ($newData as $value) {
-            $saved++;
-            DownloadImageFromS3::dispatch($value['Url'], $request_video_timelapse->code, '/seq-' . sprintf('%08d', $saved) . '.jpg', count($newData))->onQueue('download-image-s3');
-        }
+        // foreach ($newData as $value) {
+        //     $saved++;
+        //     DownloadImageFromS3::dispatch($value['Url'], $request_video_timelapse->code, '/seq-' . sprintf('%08d', $saved) . '.jpg', count($newData))->onQueue('download-image-s3');
+        // }
+
+        return response()->json(['message' => 'Request Success. Please waiting...']);
     }
 }

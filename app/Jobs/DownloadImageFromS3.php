@@ -48,8 +48,8 @@ class DownloadImageFromS3 implements ShouldQueue
 
         $files = glob($destinationPath . '/*.{png,jpg,jpeg,JPG}', GLOB_BRACE);
 
-        if ($this->maxFile == count($files)){
-            GenerateVideoTimelapse::dispatch($this->path)->onQueue('generate-video-timelapse');
+        if ($this->maxFile == count($files)) {
+            GenerateVideoTimelapse::dispatch($this->path, $this->fileName)->onQueue('generate-video-timelapse');
         }
     }
 }
