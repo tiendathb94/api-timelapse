@@ -20,15 +20,15 @@ class AuthController extends Controller
             ->first();
 
         if (!$user) {
-            return response()->json(['message' => 'Tài khoản không tồn tại trên hệ thống'], 400);
+            return response()->json(['message' => 'Your account is not found '], 400);
         }
 
         if ($user->status == 0) {
-            return response()->json(['message' => 'Tài khoản đã bị khoá trên hệ thống'], 400);
+            return response()->json(['message' => 'Your account was blocked'], 400);
         }
 
         if (!Hash::check($request->get('password'), $user->password)) {
-            return response()->json(['message' => 'Thông tin tài khoản không chính xác'], 400);
+            return response()->json(['message' => 'Your account is not correct'], 400);
         }
 
         if (count($user->tokens) > 3) $user->tokens->first()->delete();
@@ -49,7 +49,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::guard('web')->logout();
-        return response()->json(['message' => 'Đăng xuất thành công']);
+        return response()->json(['message' => 'Logout succesful']);
     }
 
     public function getUser()
@@ -68,6 +68,6 @@ class AuthController extends Controller
         $user->password = Hash::make($password);
         $user->save();
 
-        return response()->json(['message' => 'Đổi mật khẩu thành công']);
+        return response()->json(['message' => 'Change password successful']);
     }
 }
