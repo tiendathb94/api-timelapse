@@ -96,8 +96,8 @@ class TimelapseController extends Controller
             array_multisort(array_column($data, 'DateTime'), SORT_ASC, $data);
 
             $data = array_filter($data, function ($value) use ($date, $start_time, $end_time) {
-                $lte = Carbon::parse($value['DateTime'])->lte(Carbon::parse($date->format('Y-m-d') . ' ' . $start_time));
-                $gte = Carbon::parse($value['DateTime'])->gte(Carbon::parse($date->format('Y-m-d') . ' ' . $end_time));
+                $lte = Carbon::parse($value['DateTime'])->lte(Carbon::parse($date->format('Y-m-d') . ' ' . $end_time));
+                $gte = Carbon::parse($value['DateTime'])->gte(Carbon::parse($date->format('Y-m-d') . ' ' . $start_time));
                 return $lte && $gte && preg_match('/\.(jpg|jpeg|png)$/i', $value['FileName']);
             });
 
