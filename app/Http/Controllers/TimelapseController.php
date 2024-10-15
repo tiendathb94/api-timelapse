@@ -28,6 +28,8 @@ class TimelapseController extends Controller
 
         $start_date = $request->start_date;
         $end_date = $request->end_date;
+        $start_time = $request->start_time;
+        $end_time = $request->end_time;
         $cameraId = $request->camera_id;
         $receiver_mail = $request->receiver_mail;
 
@@ -38,17 +40,23 @@ class TimelapseController extends Controller
         $maxId = RequestVideoTimelapse::query()->max('id');
         $code = RequestVideoTimelapse::createVideoCode($maxId + 1);
 
-        $request_video_timelapse = RequestVideoTimelapse::query()
-            ->create([
-                'user_id' => Auth::id(),
-                'receiver_mail' => $receiver_mail,
-                'start_date' => $start_date,
-                'end_date' => $end_date,
-                'is_handled' => 0,
-                'camera_id' => $cameraId,
-                'code' => $code
+        $arrayInsert = [
+            'user_id' => Auth::id(),
+            'receiver_mail' => $receiver_mail,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'is_handled' => 0,
+            'camera_id' => $cameraId,
+            'code' => $code
+        ];
+        if ($start_time && $end_time) {
+            $arrayInsert = array_merge($arrayInsert, [
+                'start_time' => $start_time,
+                'end_time' => $end_time,
             ]);
-
+        }
+        $request_video_timelapse = RequestVideoTimelapse::query()
+            ->create($arrayInsert);
 
         $period = CarbonPeriod::create($start_date, $end_date);
 
@@ -91,8 +99,10 @@ class TimelapseController extends Controller
 
             array_multisort(array_column($data, 'DateTime'), SORT_ASC, $data);
 
-            $data = array_filter($data, function ($value) {
-                return preg_match('/\.(jpg|jpeg|png)$/i', $value['FileName']);
+            $data = array_filter($data, function ($value) use ($date, $request) {
+                $lte = Carbon::parse($value['DateTime'])->lte(Carbon::parse($date->format('Y-m-d') . ' ' . $request->end_time));
+                $gte = Carbon::parse($value['DateTime'])->gte(Carbon::parse($date->format('Y-m-d') . ' ' . $request->start_time));
+                return $lte && $gte && preg_match('/\.(jpg|jpeg|png)$/i', $value['FileName']);
             });
 
             $newData = array_merge($newData, $data);

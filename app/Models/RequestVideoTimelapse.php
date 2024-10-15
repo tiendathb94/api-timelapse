@@ -18,6 +18,11 @@ class RequestVideoTimelapse extends Model
         return $this->belongsTo(Camera::class, 'camera_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
     public static function createVideoCode($id, $keyword = "vntimelapse", $length = 8)
     {
         $alphabet = "abcdefghijklmnopqrstuvwxyz123456789";
