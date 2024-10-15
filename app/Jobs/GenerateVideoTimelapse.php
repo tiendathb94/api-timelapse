@@ -43,6 +43,20 @@ class GenerateVideoTimelapse implements ShouldQueue
 
         RequestVideoTimelapse::query()->where('code', $this->path)->update(['is_handled' => 1]);
 
+        $this->emptyFolderImage(public_path('images') . '/' . $this->path);
+
         // put s3 and send mail
+    }
+
+    private function emptyFolderImage($path, $pattern = "jpg")
+    {
+
+        if (is_dir($path)) {
+            $files = glob($path . '/*.' . $pattern, GLOB_BRACE);
+            foreach ($files as $file) {
+                if (is_file($file)) unlink($file);
+            }
+            if (count(array_diff(scandir($path), array('.', '..'))) === 0) rmdir($path);
+        }
     }
 }
