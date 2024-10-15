@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'group_id',
+        'is_create_timelapse',
         'status',
         'email_verified_at'
     ];

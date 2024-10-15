@@ -26,6 +26,10 @@ class TimelapseController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user->is_create_timelapse) {
+            return response()->json(['message' => 'Permission denied.'], 400);
+        }
+
         $start_date = $request->start_date;
         $end_date = $request->end_date;
         $start_time = $request->get('start_time', '00:00:00');
