@@ -28,8 +28,8 @@ class TimelapseController extends Controller
 
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-        $start_time = $request->start_time;
-        $end_time = $request->end_time;
+        $start_time = $request->get('start_time', '00:00:00');
+        $end_time = $request->get('end_time', '23:59:59');
         $cameraId = $request->camera_id;
 
         $camera = Camera::query()->where('active', 1)->findOrFail($cameraId);
@@ -46,14 +46,11 @@ class TimelapseController extends Controller
             'end_date' => $end_date,
             'is_handled' => 0,
             'camera_id' => $cameraId,
-            'code' => $code
+            'code' => $code,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
         ];
-        if ($start_time && $end_time) {
-            $arrayInsert = array_merge($arrayInsert, [
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            ]);
-        }
+
         $request_video_timelapse = RequestVideoTimelapse::query()
             ->create($arrayInsert);
 
@@ -98,9 +95,9 @@ class TimelapseController extends Controller
 
             array_multisort(array_column($data, 'DateTime'), SORT_ASC, $data);
 
-            $data = array_filter($data, function ($value) use ($date, $request) {
-                $lte = Carbon::parse($value['DateTime'])->lte(Carbon::parse($date->format('Y-m-d') . ' ' . $request->end_time));
-                $gte = Carbon::parse($value['DateTime'])->gte(Carbon::parse($date->format('Y-m-d') . ' ' . $request->start_time));
+            $data = array_filter($data, function ($value) use ($date, $start_time, $end_time) {
+                $lte = Carbon::parse($value['DateTime'])->lte(Carbon::parse($date->format('Y-m-d') . ' ' . $start_time));
+                $gte = Carbon::parse($value['DateTime'])->gte(Carbon::parse($date->format('Y-m-d') . ' ' . $end_time));
                 return $lte && $gte && preg_match('/\.(jpg|jpeg|png)$/i', $value['FileName']);
             });
 
