@@ -31,7 +31,6 @@ class TimelapseController extends Controller
         $start_time = $request->start_time;
         $end_time = $request->end_time;
         $cameraId = $request->camera_id;
-        $receiver_mail = $request->receiver_mail;
 
         $camera = Camera::query()->where('active', 1)->findOrFail($cameraId);
 
@@ -42,7 +41,7 @@ class TimelapseController extends Controller
 
         $arrayInsert = [
             'user_id' => Auth::id(),
-            'receiver_mail' => $receiver_mail,
+            'receiver_mail' => $user->email,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'is_handled' => 0,
