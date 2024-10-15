@@ -39,11 +39,10 @@ class GenerateVideoTimelapse implements ShouldQueue
         Log::info($ffmpeg_cmd);
         Log::info('---------------------------');
 
-        RequestVideoTimelapse::query()->where('code', $this->path)->update(['is_handled' => 1]);
         exec($ffmpeg_cmd);
 
         RequestVideoTimelapse::query()->where('code', $this->path)->update(['is_handled' => 1]);
-        
+
         // put s3 and send mail
     }
 }
