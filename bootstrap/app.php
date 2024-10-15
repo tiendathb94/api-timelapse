@@ -16,10 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->use([
             \Illuminate\Http\Middleware\HandleCors::class,
+
         ]);
-        $middleware->alias([
-            
+        $middleware->web(append: [\Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class]);
+        $middleware->api(prepend: [
+            \Opcodes\LogViewer\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
         ]);
+
+        $middleware->alias([]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
