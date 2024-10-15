@@ -40,19 +40,23 @@ class TimelapseController extends Controller
         $maxId = RequestVideoTimelapse::query()->max('id');
         $code = RequestVideoTimelapse::createVideoCode($maxId + 1);
 
-        $request_video_timelapse = RequestVideoTimelapse::query()
-            ->create([
-                'user_id' => Auth::id(),
-                'receiver_mail' => $receiver_mail,
-                'start_date' => $start_date,
-                'end_date' => $end_date,
+        $arrayInsert = [
+            'user_id' => Auth::id(),
+            'receiver_mail' => $receiver_mail,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'is_handled' => 0,
+            'camera_id' => $cameraId,
+            'code' => $code
+        ];
+        if ($start_time && $end_time) {
+            $arrayInsert = array_merge($arrayInsert, [
                 'start_time' => $start_time,
                 'end_time' => $end_time,
-                'is_handled' => 0,
-                'camera_id' => $cameraId,
-                'code' => $code
             ]);
-
+        }
+        $request_video_timelapse = RequestVideoTimelapse::query()
+            ->create($arrayInsert);
 
         $period = CarbonPeriod::create($start_date, $end_date);
 
@@ -103,7 +107,7 @@ class TimelapseController extends Controller
 
             $newData = array_merge($newData, $data);
         }
-        
+
         $saved = 0;
 
         foreach ($newData as $value) {
