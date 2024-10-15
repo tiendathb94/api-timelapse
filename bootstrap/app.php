@@ -20,8 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->web(append: [\Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class]);
         $middleware->api(prepend: [
-            \Opcodes\LogViewer\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
+            // \Opcodes\LogViewer\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
         ]);
 
         $middleware->alias([]);
