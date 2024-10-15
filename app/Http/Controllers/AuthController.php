@@ -23,10 +23,14 @@ class AuthController extends Controller
             return response()->json(['message' => 'Tài khoản không tồn tại trên hệ thống'], 400);
         }
 
+        if ($user->status == 0) {
+            return response()->json(['message' => 'Tài khoản đã bị khoá trên hệ thống'], 400);
+        }
+
         if (!Hash::check($request->get('password'), $user->password)) {
             return response()->json(['message' => 'Thông tin tài khoản không chính xác'], 400);
         }
-        
+
         if (count($user->tokens) > 3) $user->tokens->first()->delete();
 
         $access_token = $user->createToken($user->name)->plainTextToken;
@@ -50,7 +54,9 @@ class AuthController extends Controller
 
     public function getUser()
     {
-        return response()->json(['data' => Auth::user()]);
+        $user = Auth::user();
+        $user->load(['group_owner']);
+        return response()->json(['data' => $user]);
     }
 
     public function changePassword(Request $request)

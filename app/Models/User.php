@@ -23,6 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'group_id',
+        'status',
+        'email_verified_at'
     ];
 
     /**
@@ -51,5 +54,10 @@ class User extends Authenticatable
     public function group()
     {
         return $this->belongsTo(Group::class, 'group_id');
+    }
+
+    public function group_owner()
+    {
+        return $this->hasOne(Group::class, 'user_id');
     }
 }

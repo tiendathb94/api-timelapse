@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CameraController;
 use App\Http\Controllers\ImageController;
@@ -15,11 +16,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('change-password');
 
     Route::get('user', [AuthController::class, 'getUser']);
+    Route::get('accounts', [AccountController::class, 'index']);
+    Route::post('accounts/create', [AccountController::class, 'create']);
     Route::get('get-image', [ImageController::class, 'getImage']);
 
     Route::get('projects', [ProjectController::class, 'index']);
     Route::get('cameras', [CameraController::class, 'index']);
 
+    Route::get('/timelapse', [TimelapseController::class, 'index']);
     Route::post('/create-timelapse', [TimelapseController::class, 'createTimelapse']);
-
 });

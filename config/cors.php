@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://media.vntimelapse.com', 'http://localhost:3000', 'http://front.rutgonlink.net',],
+    'allowed_origins' => ['http://media.vntimelapse.com', 'http://localhost:3000', 'https://front.rutgonlink.net',],
 
     'allowed_origins_patterns' => [],
 
