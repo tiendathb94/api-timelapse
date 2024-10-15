@@ -64,7 +64,11 @@ class GenerateVideoTimelapse implements ShouldQueue
         $request_video->video_url = $url;
         $request_video->save();
 
+        SendMail::dispatch($request_video)->onQueue('send-mail');
+        
         $this->emptyFolderImage(public_path('images') . '/' . $this->path);
+
+        
     }
 
     private function uploadVideo($sourceFile, $fileName)
