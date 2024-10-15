@@ -28,8 +28,8 @@ class TimelapseController extends Controller
 
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-        $start_time = $request->start_time;
-        $end_time = $request->end_time;
+        $start_time = $request->get('start_time', '00:00:00');
+        $end_time = $request->get('end_time', '23:59:59');
         $cameraId = $request->camera_id;
 
         $camera = Camera::query()->where('active', 1)->findOrFail($cameraId);
@@ -46,14 +46,11 @@ class TimelapseController extends Controller
             'end_date' => $end_date,
             'is_handled' => 0,
             'camera_id' => $cameraId,
-            'code' => $code
+            'code' => $code,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
         ];
-        if ($start_time && $end_time) {
-            $arrayInsert = array_merge($arrayInsert, [
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            ]);
-        }
+
         $request_video_timelapse = RequestVideoTimelapse::query()
             ->create($arrayInsert);
 
