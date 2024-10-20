@@ -6,10 +6,11 @@ use App\Trait\HasStorableApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class Admin extends Model
 {
-    use HasStorableApiTokens, HasFactory, Notifiable;
+    use HasStorableApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
         'name',

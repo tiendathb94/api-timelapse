@@ -6,7 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CameraController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\TimelapseController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,5 +37,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::group(['middleware' => 'auth:admin-api'], function(){
         Route::get('user', [AdminController::class, 'getUser']);
         Route::resource('groups', GroupController::class);
+
+        Route::resource('roles', RoleController::class);
+        Route::resource('permissions', PermissionController::class);
+        Route::post('role-give-permission', [RolePermissionController::class, 'roleGivePermission']);
     });
 });
