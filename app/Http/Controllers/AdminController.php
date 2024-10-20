@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Camera;
+use App\Models\Project;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,4 +54,38 @@ class AdminController extends Controller
         return response()->json(['data' => $user]);
     }
 
+    public function listProject(Request $request)
+    {
+        $group_id = $request->group_id;
+
+        $data = Project::query()
+            ->when($group_id, fn($q) => $q->where('group_id', $group_id))
+            ->paginate();
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function listUser(Request $request)
+    {
+        $group_id = $request->group_id;
+
+        $data = User::query()
+            ->when($group_id, fn($q) => $q->where('group_id', $group_id))
+            ->paginate();
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function listCamera(Request $request)
+    {
+        $group_id = $request->group_id;
+        $project_id = $request->project_id;
+
+        $data = Camera::query()
+            ->when($group_id, fn($q) => $q->whereRaw("project_id IN (select id from projects where group_id = $group_id)"))
+            ->when($project_id, fn($q) => $q->where('project_id', $project_id))
+            ->paginate();
+
+        return response()->json(['data' => $data]);
+    }
 }

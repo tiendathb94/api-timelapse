@@ -16,4 +16,9 @@ class Group extends Model
     {
         return $this->hasMany(Project::class, 'group_id');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'group_id');
+    }
 }

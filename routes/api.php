@@ -37,9 +37,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::group(['middleware' => 'auth:admin-api'], function(){
         Route::get('user', [AdminController::class, 'getUser']);
         Route::resource('groups', GroupController::class);
-
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
         Route::post('role-give-permission', [RolePermissionController::class, 'roleGivePermission']);
+
+        Route::get('list-project', [AdminController::class, 'listProject']);
+        Route::get('list-user', [AdminController::class, 'listUser']);
+        Route::get('list-camera', [AdminController::class, 'listCamera']);
     });
 });
