@@ -13,4 +13,9 @@ class Project extends Model
     {
         return $this->belongsTo(Group::class, 'group_id');
     }
+
+    public function cameras()
+    {
+        return $this->hasMany(Camera::class, 'project_id');
+    }
 }

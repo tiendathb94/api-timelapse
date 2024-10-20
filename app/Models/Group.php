@@ -11,4 +11,9 @@ class Group extends Model
 
     protected $table = "groups";
     protected $guarded = [];
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'group_id');
+    }
 }

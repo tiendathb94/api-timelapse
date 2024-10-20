@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,14 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Admin::factory(10)->create();
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Vn-timelapse',
-            'email' => 'vn-timelapse@example.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('123456'),
-            'remember_token' =>  Str::random(10)
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Vn-timelapse',
+        //     'email' => 'vn-timelapse@example.com',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('123456'),
+        //     'remember_token' =>  Str::random(10)
+        // ]);
     }
 }
