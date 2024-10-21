@@ -58,6 +58,7 @@ class AdminController extends Controller
     public function getUser()
     {
         $user = Auth::user();
+        $user->load(['roles']);
         return response()->json(['data' => $user]);
     }
 
