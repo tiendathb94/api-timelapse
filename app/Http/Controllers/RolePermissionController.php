@@ -21,7 +21,8 @@ class RolePermissionController extends Controller
     public function assignRole(Request $request)
     {
         $user = User::query()->findOrFail($request->user_id);
-        $user->syncRoles($request->roles);
+        $roles = Role::query()->whereKey($request->roles)->get();
+        $user->syncRoles($roles);
         return response()->json(['message' => 'Update thành công']);
     }
 }

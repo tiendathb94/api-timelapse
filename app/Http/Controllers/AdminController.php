@@ -58,7 +58,7 @@ class AdminController extends Controller
     public function getUser()
     {
         $user = Auth::user();
-        $user->load(['roles']);
+        
         return response()->json(['data' => $user]);
     }
 
@@ -88,6 +88,7 @@ class AdminController extends Controller
         $group_id = $request->group_id;
 
         $data = User::query()
+            ->with('roles')
             ->when($group_id, fn($q) => $q->where('group_id', $group_id))
             ->paginate();
 
