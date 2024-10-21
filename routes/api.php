@@ -29,8 +29,11 @@ Route::group(['middleware' => 'auth:user-api'], function () {
 
     Route::get('/timelapse', [TimelapseController::class, 'index']);
     Route::post('/create-timelapse', [TimelapseController::class, 'createTimelapse']);
-});
+    
+    Route::post('role-give-permission', [RolePermissionController::class, 'roleGivePermission']);
+    Route::post('assign-role', [RolePermissionController::class, 'assignRole']);
 
+});
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('login', [AdminController::class, 'login'])->name('login');
@@ -39,7 +42,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('groups', GroupController::class);
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
+
         Route::post('role-give-permission', [RolePermissionController::class, 'roleGivePermission']);
+        Route::post('assign-role', [RolePermissionController::class, 'assignRole']);
 
         Route::get('list-project', [AdminController::class, 'listProject']);
         Route::get('list-user', [AdminController::class, 'listUser']);
