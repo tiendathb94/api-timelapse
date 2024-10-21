@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Camera;
 use App\Models\Project;
+use App\Models\RequestVideoTimelapse;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,10 +49,25 @@ class AdminController extends Controller
         ]);
     }
 
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        return response()->json(['message' => 'Logout succesful']);
+    }
+
     public function getUser()
     {
         $user = Auth::user();
         return response()->json(['data' => $user]);
+    }
+
+    public function listTimelapses(Request $request)
+    {
+        $data = RequestVideoTimelapse::query()
+            ->with(['user', 'camera'])
+            ->paginate();
+
+        return response()->json($data);
     }
 
     public function listProject(Request $request)
@@ -60,9 +76,10 @@ class AdminController extends Controller
 
         $data = Project::query()
             ->when($group_id, fn($q) => $q->where('group_id', $group_id))
+            ->with('group')
             ->paginate();
 
-        return response()->json(['data' => $data]);
+        return response()->json($data);
     }
 
     public function listUser(Request $request)
@@ -73,7 +90,7 @@ class AdminController extends Controller
             ->when($group_id, fn($q) => $q->where('group_id', $group_id))
             ->paginate();
 
-        return response()->json(['data' => $data]);
+        return response()->json($data);
     }
 
     public function listCamera(Request $request)
@@ -86,6 +103,6 @@ class AdminController extends Controller
             ->when($project_id, fn($q) => $q->where('project_id', $project_id))
             ->paginate();
 
-        return response()->json(['data' => $data]);
+        return response()->json($data);
     }
 }

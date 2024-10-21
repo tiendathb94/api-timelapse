@@ -15,6 +15,6 @@ class ProjectController extends Controller
             'group_id' => $user->group_id,
             'active' => 1
         ])->get();
-        return response()->json(['data' => $projects]);
+        return response()->json($projects);
     }
 }
