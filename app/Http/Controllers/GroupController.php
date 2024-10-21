@@ -9,7 +9,7 @@ class GroupController extends Controller
 {
     public function index()
     {
-        $data = Group::query()->paginate();
+        $data = Group::query()->with('owner')->paginate();
         return response()->json(['data' => $data]);
     }
 

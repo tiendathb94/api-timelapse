@@ -37,8 +37,9 @@ Route::group(['middleware' => 'auth:user-api'], function () {
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('login', [AdminController::class, 'login'])->name('login');
-    Route::group(['middleware' => 'auth:admin-api'], function(){
+    Route::group(['middleware' => 'auth:admin-api'], function () {
         Route::get('user', [AdminController::class, 'getUser']);
+        Route::post('logout', [AdminController::class, 'logout']);
         Route::resource('groups', GroupController::class);
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
@@ -49,5 +50,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('list-project', [AdminController::class, 'listProject']);
         Route::get('list-user', [AdminController::class, 'listUser']);
         Route::get('list-camera', [AdminController::class, 'listCamera']);
+        Route::get('list-timelapse', [AdminController::class, 'listTimelapses']);
     });
 });
